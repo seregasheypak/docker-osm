@@ -142,4 +142,10 @@ tables:
       #      healthcare: [__any__]
       #      emergency: [__any__]
       #      playground: [__any__]
-
+tags:
+  exclude:
+    - created_by
+    - source
+    - tiger:*
+    - note
+  load_all: true
