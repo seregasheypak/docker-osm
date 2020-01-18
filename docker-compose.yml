@@ -47,7 +47,7 @@ services:
       - CONTINENT=europe
       - COUNTRY=spain
       - BASE_URL=http://download.geofabrik.de
-      - MAPPING_URL=https://raw.githubusercontent.com/kartoza/docker-osm/develop/settings
+      - MAPPING_URL=https://raw.githubusercontent.com/seregasheypak/docker-osm/spain/settings/
       - GEOJSON_URL=''
 
   imposm:
