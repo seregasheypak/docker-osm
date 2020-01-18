@@ -6,6 +6,9 @@ COUNTRY_LOCKFILE=/home/settings/.${COUNTRY}_lock
 touch /home/settings/last.state.txt
 touch /home/settings/timestamp.txt
 
+echo "settings.yml DOWNLOAD.SH"
+echo "/home/settings content:"
+ls -la /home/c
 # Download OSM Mapping file and Associated data
 if [ ! -f /home/settings/mapping.yml ]; then \
   wget -c ${MAPPING_URL}/mapping.yml -O /home/settings/mapping.yml
