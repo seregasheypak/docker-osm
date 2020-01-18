@@ -45,31 +45,31 @@ tables:
     type: point
 
   poi_poly:
-  fields:
-    - key: null
-      name: osm_id
-      type: id
-    - key: null
-      name: geom
-      type: geometry
-    - key: null
-      name: tags
-      type: hstore_tags
-  type: polygon
-  mapping:
-    amenity: [__any__]
-    historic: [__any__]
-    leisure: [__any__]
-    shop: [__any__]
-    tourism: [__any__]
-    industrial: [__any__]
-    craft: [__any__]
-    man_made: [__any__]
-    healthcare: [__any__]
-    emergency: [__any__]
-    # It is IMO a bad tagging decision that we need those :(
-    playground: [__any__]
-    camp_site: [__any__]
+    fields:
+      - key: null
+        name: osm_id
+        type: id
+      - key: null
+        name: geom
+        type: geometry
+      - key: null
+        name: tags
+        type: hstore_tags
+    type: polygon
+    mapping:
+      amenity: [__any__]
+      historic: [__any__]
+      leisure: [__any__]
+      shop: [__any__]
+      tourism: [__any__]
+      industrial: [__any__]
+      craft: [__any__]
+      man_made: [__any__]
+      healthcare: [__any__]
+      emergency: [__any__]
+      # It is IMO a bad tagging decision that we need those :(
+      playground: [__any__]
+      camp_site: [__any__]
 
   poi_line:
     fields:
@@ -115,33 +115,6 @@ tables:
       playground: [__any__]
       camp_site: [__any__]
 
-      # requires type_mapping
-      #  poi_all:
-      #    fields:
-      #      - key: null
-      #        name: osm_id
-      #        type: id
-      #      - key: null
-      #        name: geom
-      #        type: geometry
-      #      - key: null
-      #        name: tags
-      #        type: hstore_tags
-      #    type: geometry
-      #    mapping:
-      #      highway: [__any__]
-      #      camp_site: [__any__]
-      #      amenity: [__any__]
-      #      historic: [__any__]
-      #      leisure: [__any__]
-      #      shop: [__any__]
-      #      tourism: [__any__]
-      #      industrial: [__any__]
-      #      craft: [__any__]
-      #      man_made: [__any__]
-      #      healthcare: [__any__]
-      #      emergency: [__any__]
-      #      playground: [__any__]
 tags:
   exclude:
     - created_by
@@ -149,3 +122,6 @@ tags:
     - tiger:*
     - note
   load_all: true
+
+# mangles nodes positive, ways negative, relations negative -1e17
+use_single_id_space: true
