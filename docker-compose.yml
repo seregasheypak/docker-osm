@@ -45,7 +45,7 @@ services:
     environment:
       # Read the README in docker-osm-pbf
       - CONTINENT=europe
-      - COUNTRY=spain
+      - COUNTRY=russia
       - BASE_URL=http://download.geofabrik.de
       - MAPPING_URL=https://raw.githubusercontent.com/seregasheypak/docker-osm/spain/settings/
       - GEOJSON_URL=''
