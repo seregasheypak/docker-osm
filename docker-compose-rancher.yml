@@ -5,13 +5,7 @@ volumes:
   import_done:
   import_queue:
   cache:
-  # osm_settings:
   osm_settings:
-    driver: local
-    driver_opts:
-      type: none
-      device: $PWD/settings
-      o: bind
   pgadmin_data:
 
 services:
@@ -28,31 +22,28 @@ services:
       # - ALLOW_IP_RANGE= 0.0.0.0/0
     volumes:
       - osm-postgis-data:/var/lib/postgresql
-      # Uncomment to use the postgis database from outside the docker network
-    ports:
-      - "35432:5432"
+    # Uncomment to use the postgis database from outside the docker network
+    # ports:
+    #  - "35432:5432"
     healthcheck:
       test: "exit 0"
 
   osm_downloader:
     image: kartoza/docker-osm:pbf-downloader
-    build: docker-osm-pbf
     container_name: dockerosm_pbf_download
     volumes:
       # These are sharable to other containers
-      # /Users/ssa/devel/parity/sandbox/docker-osm/settings
       - osm_settings:/home/settings
     environment:
       # Read the README in docker-osm-pbf
-      - CONTINENT=europe
-      - COUNTRY=russia
+      - CONTINENT=africa
+      - COUNTRY=south-africa
       - BASE_URL=http://download.geofabrik.de
-      - MAPPING_URL=https://raw.githubusercontent.com/seregasheypak/docker-osm/spain/settings/
+      - MAPPING_URL=https://raw.githubusercontent.com/kartoza/docker-osm/develop/settings
       - GEOJSON_URL=''
 
   imposm:
     image: kartoza/docker-osm:imposm-latest
-    build: docker-imposm3
     container_name: dockerosm_imposm
     volumes:
       # These are sharable to other containers
@@ -71,9 +62,9 @@ services:
       - POSTGRES_HOST=db
       # seconds between 2 executions of the script
       # if 0, then no update will be done, only the first initial import from the PBF
-      - TIME=0
+      - TIME=120
       # folder for settings (with *.json and *.sql)
-      - SETTINGS=./settings
+      - SETTINGS=settings
       # folder for caching
       - CACHE=cache
       # folder for diff which has been imported
@@ -128,7 +119,7 @@ services:
       - IMPORT_DONE=import_done
       # seconds between 2 executions of the script
       # if 0, then no update will be done, only the first initial import from the PBF
-      - TIME=0
+      - TIME=120
     command: bash -c "while [ ! -f /home/settings/country.pbf ] ; do sleep 1; done && python3 -u /home/download.py"
 
   pgadmin4:
