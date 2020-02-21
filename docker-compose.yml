@@ -1,7 +1,7 @@
 version: '2.1'
 
 volumes:
-  osm-postgis-data:
+  #osm-postgis-data:
   import_done:
   import_queue:
   cache:
@@ -27,7 +27,8 @@ services:
       # Uncomment to expose the postgis database on the network
       # - ALLOW_IP_RANGE= 0.0.0.0/0
     volumes:
-      - osm-postgis-data:/var/lib/postgresql
+      - ./postgres-data:/var/lib/postgresql
+      #- osm-postgis-data:/User/ssa/postgresql:z
       # Uncomment to use the postgis database from outside the docker network
     ports:
       - "35432:5432"
@@ -135,7 +136,7 @@ services:
     image: dpage/pgadmin4:4.16
     hostname: pgadmin4
     volumes:
-      - pgadmin_data:/var/lib/pgadmin
+      - pgadmin_data:/User/ssa/pgadmin:z
     environment:
       - PGADMIN_DEFAULT_EMAIL=docker@gmail.com
       - PGADMIN_DEFAULT_PASSWORD=docker
