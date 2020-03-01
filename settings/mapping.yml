@@ -3,6 +3,8 @@
 # https://wiki.openstreetmap.org/wiki/Key:shop
 # https://wiki.openstreetmap.org/wiki/Key:amenity
 
+# ???
+# https://github.com/omniscale/imposm3/blob/master/example-mapping.yml
 areas:
   area_tags: [buildings, landuse, leisure, natural, aeroway]
   linear_tags: [highway, barrier]

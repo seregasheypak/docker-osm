@@ -5,14 +5,13 @@ volumes:
   import_done:
   import_queue:
   cache:
-  # osm_settings:
   osm_settings:
     driver: local
     driver_opts:
       type: none
       device: $PWD/settings
       o: bind
-  pgadmin_data:
+  #pgadmin_data:
 
 services:
   db:
@@ -92,7 +91,7 @@ services:
       # http://imposm.org/docs/imposm3/latest/tutorial.html#deploy-production-tables
       - DBSCHEMA_BACKUP=backup
       # Install some styles if you are using the default mapping. It can be 'yes' or 'no'
-      - QGIS_STYLE=yes
+      - QGIS_STYLE=no
       # Use clip in the database - To use this you should have run make import_clip to add your clip to the DB
       - CLIP=no
     command: bash -c "while [ ! -f /home/settings/country.pbf ] ; do sleep 1; done && python3 -u /home/importer.py"
@@ -136,7 +135,7 @@ services:
     image: dpage/pgadmin4:4.16
     hostname: pgadmin4
     volumes:
-      - pgadmin_data:/User/ssa/pgadmin:z
+      - ./pgadmin_data:/var/lib/pgadmin
     environment:
       - PGADMIN_DEFAULT_EMAIL=docker@gmail.com
       - PGADMIN_DEFAULT_PASSWORD=docker

@@ -49,7 +49,7 @@ class Importer(object):
             'DBSCHEMA_IMPORT': 'import',
             'DBSCHEMA_BACKUP': 'backup',
             'CLIP': 'no',
-            'QGIS_STYLE': 'yes'
+            'QGIS_STYLE': 'no'
         }
         self.osm_file = None
         self.mapping_file = None
@@ -80,6 +80,15 @@ class Importer(object):
         This will run when the container is starting. If an error occurs, the
         container will stop.
         """
+
+        if self.mapping_file:
+            with open(self.mapping_file, "r") as myfile:
+                data = myfile.readlines()
+                self.info(data)
+        else:
+            self.info("it's empty: ")
+            self.info(self.mapping_file)
+
         # Check valid SRID.
         if self.default['SRID'] not in ['4326', '3857']:
             msg = 'SRID not supported : %s' % self.default['SRID']
@@ -123,6 +132,9 @@ class Importer(object):
 
             if f.endswith('.yml'):
                 self.mapping_file = join(self.default['SETTINGS'], f)
+                with open(self.mapping_file, "r") as myfile:
+                    data = myfile.readlines()
+                    self.info(data)
 
             if f == 'post-pbf-import.sql':
                 self.post_import_file = join(self.default['SETTINGS'], f)
@@ -143,7 +155,7 @@ class Importer(object):
             msg = 'Mapping file *.yml is missing in %s' % self.default['SETTINGS']
             self.error(msg)
         else:
-            self.info('Mapping: ' + self.osm_file)
+            self.info('Mapping: ' + self.mapping_file)
 
         if not self.post_import_file:
             self.info('No custom SQL files post-pbf-import.sql detected in %s' % self.default['SETTINGS'])
@@ -189,6 +201,7 @@ class Importer(object):
 
     def check_postgis(self):
         """Test connection to PostGIS and create the URI."""
+        self.info("check_postgis")
         try:
             connection = connect(
                 "dbname='%s' user='%s' host='%s' password='%s'" % (
@@ -235,8 +248,17 @@ class Importer(object):
 
     def run(self):
         """First checker."""
-        osm_tables = self.locate_table('osm_%')
+        self.info("run")
+        if self.mapping_file:
+            with open(self.mapping_file, "r") as myfile:
+                data = myfile.readlines()
+                self.info(data)
+        else:
+            self.info("it's empty: ")
+            self.info(self.mapping_file)
 
+        osm_tables = self.locate_table('osm_%')
+        self.info(osm_tables)
         if osm_tables != 1:
             # It means that the DB is empty. Let's import the PBF file.
 
@@ -258,6 +280,14 @@ class Importer(object):
 
     def _first_pbf_import(self, args):
         """Run the first PBF import into the database."""
+        if self.mapping_file:
+            with open(self.mapping_file, "r") as myfile:
+                data = myfile.readlines()
+                self.info(data)
+        else:
+            self.info("it's empty: ")
+            self.info(self.mapping_file)
+
         command = ['imposm', 'import', '-diff', '-deployproduction']
         command += ['-overwritecache', '-cachedir', self.default['CACHE']]
         command += ['-srid', self.default['SRID']]
@@ -278,15 +308,15 @@ class Importer(object):
         else:
             self.info('Import PBF successful : %s' % self.osm_file)
 
-        if self.post_import_file or self.qgis_style:
-            # Set the password for psql
-            environ['PGPASSWORD'] = self.default['POSTGRES_PASS']
+        # if self.post_import_file or self.qgis_style:
+        #     # Set the password for psql
+        #     environ['PGPASSWORD'] = self.default['POSTGRES_PASS']
 
         if self.post_import_file:
             self.import_custom_sql()
 
-        if self.qgis_style:
-            self.import_qgis_styles()
+        # if self.qgis_style:
+        #     self.import_qgis_styles()
 
     def _import_diff(self, args):
         # Finally launch the listening process.
